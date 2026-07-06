@@ -8,12 +8,22 @@ const Sidebar = ({
   timeframe, 
   setTimeframe,
   indicators,
-  setIndicators
+  setIndicators,
+  view,
+  setView,
+  evalDays,
+  setEvalDays
 }) => {
   const timeframes = [
     { label: '6M', value: 180 },
     { label: '1Y', value: 365 },
     { label: '3Y', value: 1095 }
+  ];
+
+  const evalPeriods = [
+    { label: '15D', value: 15 },
+    { label: '30D', value: 30 },
+    { label: '60D', value: 60 }
   ];
 
   const handleToggle = (key) => {
@@ -27,6 +37,18 @@ const Sidebar = ({
           <Layers size={18} /> MarketSeq
         </span>
         <span className="logo-meta">v3.0 | TERMINAL ENGINE</span>
+      </div>
+
+      <div className="sidebar-section">
+        <h2>View</h2>
+        <div className="view-toggle">
+          <button className={`view-btn ${view === 'dashboard' ? 'active' : ''}`} onClick={() => setView('dashboard')}>
+            Dashboard
+          </button>
+          <button className={`view-btn ${view === 'evaluation' ? 'active' : ''}`} onClick={() => setView('evaluation')}>
+            Evaluation
+          </button>
+        </div>
       </div>
 
       <div className="sidebar-section">
@@ -47,37 +69,58 @@ const Sidebar = ({
         </div>
       </div>
 
-      <div className="sidebar-section">
-        <h2>Timeframe</h2>
-        <div className="timeframe-group">
-          {timeframes.map((tf) => (
-            <button
-              key={tf.label}
-              onClick={() => setTimeframe(tf.value)}
-              className={`timeframe-btn ${timeframe === tf.value ? 'active' : ''}`}
-            >
-              {tf.label}
-            </button>
-          ))}
+      {view === 'evaluation' && (
+        <div className="sidebar-section">
+          <h2>Eval Period</h2>
+          <div className="timeframe-group">
+            {evalPeriods.map((ep) => (
+              <button
+                key={ep.label}
+                onClick={() => setEvalDays(ep.value)}
+                className={`timeframe-btn ${evalDays === ep.value ? 'active' : ''}`}
+              >
+                {ep.label}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
-      <div className="sidebar-section">
-        <h2>Overlays</h2>
-        <div className="control-group">
-          {Object.entries(indicators).map(([key, value]) => (
-            <label key={key} className="toggle-label">
-              <span className="mono" style={{textTransform: 'uppercase'}}>{key}</span>
-              <input 
-                type="checkbox" 
-                checked={value}
-                onChange={() => handleToggle(key)}
-              />
-              <div className="toggle-switch"></div>
-            </label>
-          ))}
+      {view === 'dashboard' && (
+        <div className="sidebar-section">
+          <h2>Timeframe</h2>
+          <div className="timeframe-group">
+            {timeframes.map((tf) => (
+              <button
+                key={tf.label}
+                onClick={() => setTimeframe(tf.value)}
+                className={`timeframe-btn ${timeframe === tf.value ? 'active' : ''}`}
+              >
+                {tf.label}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
+
+      {view === 'dashboard' && (
+        <div className="sidebar-section">
+          <h2>Overlays</h2>
+          <div className="control-group">
+            {Object.entries(indicators).map(([key, value]) => (
+              <label key={key} className="toggle-label">
+                <span className="mono" style={{textTransform: 'uppercase'}}>{key}</span>
+                <input 
+                  type="checkbox" 
+                  checked={value}
+                  onChange={() => handleToggle(key)}
+                />
+                <div className="toggle-switch"></div>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
       
     </aside>
   );

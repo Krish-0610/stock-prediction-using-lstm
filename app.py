@@ -99,5 +99,19 @@ def get_evaluation():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/api/backtest', methods=['GET'])
+def get_backtest():
+    index_name = request.args.get('index', 'nifty50')
+    days = int(request.args.get('days', 30))
+
+    try:
+        from interface.evaluate import run_backtest
+        result = run_backtest(index_name, eval_days=days)
+        return jsonify(result)
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
 if __name__ == '__main__':
     app.run(port=5000, debug=True)

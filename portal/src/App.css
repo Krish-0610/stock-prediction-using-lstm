@@ -788,3 +788,197 @@ input[type="checkbox"] {
 .amber {
   color: var(--amber);
 }
+
+/* ── View Toggle ── */
+.view-toggle {
+  display: flex;
+  gap: 2px;
+  border: 1px solid var(--border);
+}
+
+.view-btn {
+  flex: 1;
+  padding: 8px 4px;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  text-align: center;
+  text-transform: uppercase;
+  transition: all 0.15s ease;
+}
+
+.view-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.view-btn.active {
+  background: var(--green-muted);
+  color: var(--green-bright);
+  border-bottom: 1px solid var(--green-dim);
+}
+
+/* ── Backtest View ── */
+.backtest-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.backtest-metrics {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.backtest-chart-section {
+  border-bottom: 1px solid var(--border);
+  padding: 0;
+}
+
+.backtest-chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-panel);
+}
+
+.backtest-chart-title {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--text-label);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.backtest-chart-title::before {
+  content: '▶';
+  font-size: 0.5rem;
+  color: var(--green-dim);
+}
+
+.backtest-chart-inner {
+  background:
+    linear-gradient(rgba(0, 255, 65, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 65, 0.015) 1px, transparent 1px);
+  background-size: 60px 40px;
+  background-color: var(--bg-card);
+  padding: 16px 8px;
+}
+
+/* ── Backtest Table ── */
+.backtest-table-section {
+  padding: 0;
+  flex: 1;
+}
+
+.backtest-table-wrapper {
+  max-height: 400px;
+  overflow-y: auto;
+  border-bottom: 1px solid var(--border);
+}
+
+.backtest-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+
+.backtest-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.backtest-table th {
+  background: var(--bg-panel);
+  color: var(--text-label);
+  font-size: 0.6rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 10px 16px;
+  text-align: right;
+  border-bottom: 1px solid var(--border-active);
+  white-space: nowrap;
+}
+
+.backtest-table th:first-child {
+  text-align: left;
+}
+
+.backtest-table td {
+  padding: 8px 16px;
+  text-align: right;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  transition: background 0.1s;
+}
+
+.backtest-table td:first-child {
+  text-align: left;
+  color: var(--text-secondary);
+}
+
+.backtest-table tbody tr:hover td {
+  background: var(--bg-hover);
+}
+
+.backtest-table .positive {
+  color: var(--green-mid);
+}
+
+.backtest-table .negative {
+  color: var(--red);
+}
+
+.direction-icon {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.direction-icon.correct {
+  color: var(--green-bright);
+  text-shadow: 0 0 6px rgba(0, 255, 65, 0.4);
+}
+
+.direction-icon.wrong {
+  color: var(--red);
+}
+
+/* ── No Data State ── */
+.backtest-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 40px;
+  gap: 12px;
+  flex: 1;
+}
+
+.backtest-empty-text {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.backtest-empty-sub {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  opacity: 0.6;
+}

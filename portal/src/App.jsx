@@ -4,6 +4,7 @@ import Sidebar from './components/Sidebar';
 import StockChart from './components/StockChart';
 import ForecastHero from './components/ForecastHero';
 import Evaluation from './components/Evaluation';
+import BacktestView from './components/BacktestView';
 import './App.css';
 
 const API_BASE = 'http://localhost:5000/api';
@@ -28,6 +29,11 @@ function App() {
   
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const [view, setView] = useState('dashboard');
+  const [evalDays, setEvalDays] = useState(30);
+  const [backtestData, setBacktestData] = useState(null);
+  const [backtestLoading, setBacktestLoading] = useState(false);
 
   // Initial config load
   useEffect(() => {
@@ -83,6 +89,26 @@ function App() {
     }
   }, [selectedIndex, timeframe, config]);
 
+  // Backtest data fetching effect
+  useEffect(() => {
+    if (view !== 'evaluation' || !config) return;
+    const fetchBacktest = async () => {
+      setBacktestLoading(true);
+      try {
+        const res = await axios.get(`${API_BASE}/backtest`, {
+          params: { index: selectedIndex, days: evalDays }
+        });
+        setBacktestData(res.data);
+      } catch (err) {
+        console.error('Backtest fetch failed', err);
+        setBacktestData(null);
+      } finally {
+        setBacktestLoading(false);
+      }
+    };
+    fetchBacktest();
+  }, [view, selectedIndex, evalDays, config]);
+
   const isMarketOpen = new Date().getHours() > 9 && new Date().getHours() < 16 && new Date().getDay() !== 0 && new Date().getDay() !== 6;
   const lastClose = data.historical.length > 0 
     ? data.historical[data.historical.length - 1].Close 
@@ -100,6 +126,10 @@ function App() {
         setTimeframe={setTimeframe}
         indicators={indicators}
         setIndicators={setIndicators}
+        view={view}
+        setView={setView}
+        evalDays={evalDays}
+        setEvalDays={setEvalDays}
       />
       
       <main className="main-content">
@@ -121,26 +151,32 @@ function App() {
         )}
 
         <div style={{position: 'relative', display: 'flex', flexDirection: 'column', flex: 1}}>
-          {loading && (
-            <div className="loading-overlay">
-              <div className="loading-text">FETCHING FEED...</div>
-              <div className="spinner"></div>
-            </div>
-          )}
-          
-          <ForecastHero 
-            prediction={data.prediction} 
-            lastClose={lastClose}
-          />
+          {view === 'dashboard' ? (
+            <>
+              {loading && (
+                <div className="loading-overlay">
+                  <div className="loading-text">FETCHING FEED...</div>
+                  <div className="spinner"></div>
+                </div>
+              )}
+              
+              <ForecastHero 
+                prediction={data.prediction} 
+                lastClose={lastClose}
+              />
 
-          <div className="dashboard-grid">
-            <StockChart 
-              historicalData={data.historical} 
-              indicators={indicators}
-            />
-            
-            <Evaluation evalData={data.evaluation} />
-          </div>
+              <div className="dashboard-grid">
+                <StockChart 
+                  historicalData={data.historical} 
+                  indicators={indicators}
+                />
+                
+                <Evaluation evalData={data.evaluation} />
+              </div>
+            </>
+          ) : (
+            <BacktestView backtestData={backtestData} loading={backtestLoading} />
+          )}
         </div>
       </main>
     </div>
