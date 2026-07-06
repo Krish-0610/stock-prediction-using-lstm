@@ -24,6 +24,9 @@ env/
 *.h5
 *.pkl
 *.joblib
+*.keras
+
+experiment/
 
 # IDE specific files
 .vscode/
@@ -53,3 +56,7 @@ build/
 dist/
 *.egg-info/
 
+node_modules
+test/
+CONTEXT.md
+models
